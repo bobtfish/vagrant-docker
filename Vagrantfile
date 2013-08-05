@@ -24,24 +24,6 @@ Vagrant::Config.run do |config|
     pkg_cmd << "add-apt-repository -y ppa:ubuntu-x-swat/r-lts-backport; " \
       "apt-get update -qq; apt-get install -q -y linux-image-3.8.0-19-generic; "
     pkg_cmd << "ln -s /vagrant/apps/ /home/vagrant/apps; "
-    # Add guest additions if local vbox VM
-    is_vbox = true
-    ARGV.each do |arg| is_vbox &&= !arg.downcase.start_with?("--provider") end
-    if is_vbox
-      pkg_cmd << "apt-get install -q -y linux-headers-3.8.0-19-generic dkms; " \
-        "echo 'Downloading VBox Guest Additions...'; " \
-        "wget -q http://dlc.sun.com.edgesuite.net/virtualbox/4.2.12/VBoxGuestAdditions_4.2.12.iso; "
-      # Prepare the VM to add guest additions after reboot
-      pkg_cmd << "echo -e 'mount -o loop,ro /home/vagrant/VBoxGuestAdditions_4.2.12.iso /mnt\n" \
-        "echo yes | /mnt/VBoxLinuxAdditions.run\numount /mnt\n" \
-          "rm /root/guest_additions.sh; ' > /root/guest_additions.sh; " \
-        "chmod 700 /root/guest_additions.sh; " \
-        "sed -i -E 's#^exit 0#[ -x /root/guest_additions.sh ] \\&\\& /root/guest_additions.sh#' /etc/rc.local; " \
-        "echo 'Installation of VBox Guest Additions is proceeding in the background.'; " \
-        "echo '\"vagrant reload\" can be used in about 2 minutes to activate the new guest additions.'; "
-    end
-    # Activate new kernel
-    pkg_cmd << "shutdown -r +1; "
     config.vm.provision :shell, :inline => pkg_cmd
   end
 end
@@ -49,6 +31,10 @@ end
 
 # Providers were added on Vagrant >= 1.1.0
 Vagrant::VERSION >= "1.1.0" and Vagrant.configure("2") do |config|
+
+  config.vm.provision :shell,
+    :inline => 'sudo -u vagrant sh -c "docker run ubuntu /bin/echo hello world"
+
   config.vm.provider :aws do |aws, override|
     aws.access_key_id = ENV["AWS_ACCESS_KEY_ID"]
     aws.secret_access_key = ENV["AWS_SECRET_ACCESS_KEY"]
