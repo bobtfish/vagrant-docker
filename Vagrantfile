@@ -33,7 +33,7 @@ end
 Vagrant::VERSION >= "1.1.0" and Vagrant.configure("2") do |config|
 
   config.vm.provision :shell,
-    :inline => 'sudo -u vagrant sh -c "docker run ubuntu /bin/echo hello world"
+    :inline => 'sudo -u vagrant sh -c "docker run ubuntu /bin/echo hello world"'
 
   config.vm.provider :aws do |aws, override|
     aws.access_key_id = ENV["AWS_ACCESS_KEY_ID"]
