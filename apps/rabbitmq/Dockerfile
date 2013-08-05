@@ -23,6 +23,8 @@ RUN chown -R rabbitmq:rabbitmq /var/log/rabbitmq
 RUN /usr/sbin/rabbitmq-plugins enable rabbitmq_stomp
 RUN /usr/sbin/rabbitmq-plugins enable rabbitmq_management
 
-
+EXPOSE 5672:5672
+EXPOSE 61613:61613
+EXPOSE 15672:15672
 ENTRYPOINT /usr/sbin/rabbitmq-server
 
