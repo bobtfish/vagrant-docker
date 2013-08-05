@@ -6,7 +6,7 @@ then
   docker ps | grep $DOCKER_ID >/dev/null
   if [ $? != 0 ];
   then
-    docker run $DOCKER_ID
+    docker run -i $DOCKER_ID
   fi
 fi
 
