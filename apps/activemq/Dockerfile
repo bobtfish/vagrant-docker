@@ -19,7 +19,6 @@ RUN tar xzf /tmp/apache-activemq-5.8.0-bin.tar.gz -C /tmp
 ADD activemq.xml /tmp/apache-activemq-5.8.0/conf/activemq.xml
 RUN mv /tmp/apache-activemq-5.8.0 /opt/activemq
 RUN /opt/activemq/bin/activemq setup /etc/default/activemq
-RUN apt-get install -y strace 
 
 EXPOSE 61616:61616
 EXPOSE 5672:5672
