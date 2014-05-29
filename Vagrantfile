@@ -17,12 +17,10 @@ Vagrant::Config.run do |config|
   # Provision docker and new kernel if deployment was not done
   if Dir.glob("#{File.dirname(__FILE__)}/.vagrant/machines/default/*/id").empty?
     # Add lxc-docker package
-    pkg_cmd = "apt-get update -qq; apt-get install -q -y python-software-properties; " \
-      "add-apt-repository -y ppa:dotcloud/lxc-docker; apt-get update -qq; " \
-      "apt-get install -q -y lxc-docker; "
-    # Add X.org Ubuntu backported 3.8 kernel
-    pkg_cmd << "add-apt-repository -y ppa:ubuntu-x-swat/r-lts-backport; " \
-      "apt-get update -qq; apt-get install -q -y linux-image-3.8.0-19-generic; "
+    pkg_cmd = "apt-get update -qq; apt-get install -q -y python-software-properties apt-transport-https; " \
+      "apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9; " \
+      "sh -c 'echo deb https://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list'" \
+      "apt-get install -q -y lxc-docker linux-image-generic-lts-raring linux-headers-generic-lts-raring; "
     pkg_cmd << "ln -s /vagrant/apps/ /home/vagrant/apps; "
     config.vm.provision :shell, :inline => pkg_cmd
   end
