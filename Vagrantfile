@@ -20,50 +20,19 @@ Vagrant::Config.run do |config|
     pkg_cmd = "apt-get update -qq; apt-get install -q -y python-software-properties apt-transport-https; " \
       "apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9; " \
       "sh -c 'echo deb https://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list'" \
-      "apt-get install -q -y lxc-docker linux-image-generic-lts-raring linux-headers-generic-lts-raring vim; "
+      "apt-get install -q -y lxc-docker linux-image-generic-lts-raring linux-headers-generic-lts-raring vim links;"
     pkg_cmd << "ln -s /vagrant/apps/ /home/vagrant/apps; "
     config.vm.provision :shell, :inline => pkg_cmd
   end
 end
 
 
-# Providers were added on Vagrant >= 1.1.0
-Vagrant::VERSION >= "1.1.0" and Vagrant.configure("2") do |config|
-
+Vagrant.configure("2") do |config|
   config.vm.provision :shell,
-    :inline => 'sudo -u vagrant sh -c "docker run ubuntu:precise /bin/echo hello world"'
+    :inline => 'sudo -u vagrant sh -c "docker run -d --name etcd coreos/etcd"'
+  config.vm.provision :shell,
+    :inline => 'sudo -u vagrant sh -c "docker pull progrium/buildstep;docker pull bobtfish/synapse-etcd-amb;docker pull bobtfish/nerve-etcd"'
 
-  config.vm.provider :aws do |aws, override|
-    aws.access_key_id = ENV["AWS_ACCESS_KEY_ID"]
-    aws.secret_access_key = ENV["AWS_SECRET_ACCESS_KEY"]
-    aws.keypair_name = ENV["AWS_KEYPAIR_NAME"]
-    override.ssh.private_key_path = ENV["AWS_SSH_PRIVKEY"]
-    override.ssh.username = "ubuntu"
-    aws.region = AWS_REGION
-    aws.ami    = AWS_AMI
-    aws.instance_type = "t1.micro"
-  end
-
-  config.vm.provider :rackspace do |rs|
-    config.ssh.private_key_path = ENV["RS_PRIVATE_KEY"]
-    rs.username = ENV["RS_USERNAME"]
-    rs.api_key  = ENV["RS_API_KEY"]
-    rs.public_key_path = ENV["RS_PUBLIC_KEY"]
-    rs.flavor   = /512MB/
-    rs.image    = /Ubuntu/
-  end
-
-  config.vm.provider :vmware_fusion do |f, override|
-    override.vm.box = BOX_NAME
-    override.vm.box_url = VF_BOX_URI
-    override.vm.synced_folder ".", "/vagrant", disabled: true
-    f.vmx["displayName"] = "docker"
-  end
-
-  config.vm.provider :virtualbox do |vb|
-    config.vm.box = BOX_NAME
-    config.vm.box_url = BOX_URI
-  end
 end
 
 if !FORWARD_DOCKER_PORTS.nil?
