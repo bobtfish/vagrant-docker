@@ -27,6 +27,8 @@ Vagrant::Config.run do |config|
     puppet.module_path = "modules"
     puppet.manifest_file  = "site.pp"
   end
+
+  config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 end
 
 if !FORWARD_DOCKER_PORTS.nil?
