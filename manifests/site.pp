@@ -21,7 +21,7 @@ docker::run { 'etcd':
   command  => '';
 }
 
-ensure_packages(['vim', 'links', 'netcat'])
+ensure_packages(['vim', 'links', 'netcat', 'curl', 'wget', 'git-core'])
 
 file { '/home/vagrant/apps':
   ensure => 'link',

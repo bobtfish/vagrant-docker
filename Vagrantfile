@@ -6,7 +6,6 @@ BOX_URI = ENV['BOX_URI'] || "http://files.vagrantup.com/precise64.box"
 VF_BOX_URI = ENV['BOX_URI'] || "http://files.vagrantup.com/precise64_vmware_fusion.box"
 AWS_REGION = ENV['AWS_REGION'] || "us-east-1"
 AWS_AMI    = ENV['AWS_AMI']    || "ami-d0f89fb9"
-FORWARD_DOCKER_PORTS = ENV['FORWARD_DOCKER_PORTS']
 
 Vagrant::Config.run do |config|
   # Setup virtual machine box. This VM configuration code is always executed.
@@ -31,16 +30,9 @@ Vagrant::Config.run do |config|
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 end
 
-if !FORWARD_DOCKER_PORTS.nil?
-    Vagrant::VERSION < "1.1.0" and Vagrant::Config.run do |config|
-        (49000..49900).each do |port|
-            config.vm.forward_port port, port
-        end
-    end
-
-    Vagrant::VERSION >= "1.1.0" and Vagrant.configure("2") do |config|
-        (49000..49900).each do |port|
-            config.vm.network :forwarded_port, :host => port, :guest => port
-        end
-    end
+Vagrant.configure("2") do |config|
+  (49000..49900).each do |port|
+    config.vm.network :forwarded_port, :host => port, :guest => port
+  end
 end
+
