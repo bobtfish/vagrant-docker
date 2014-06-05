@@ -18,21 +18,15 @@ Vagrant::Config.run do |config|
   if Dir.glob("#{File.dirname(__FILE__)}/.vagrant/machines/default/*/id").empty?
     # Add lxc-docker package
     pkg_cmd = "apt-get update -qq; apt-get install -q -y python-software-properties apt-transport-https; " \
-      "apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9; " \
-      "sh -c 'echo deb https://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list'" \
-      "apt-get install -q -y lxc-docker linux-image-generic-lts-raring linux-headers-generic-lts-raring vim links;"
-    pkg_cmd << "ln -s /vagrant/apps/ /home/vagrant/apps; "
+      "apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9; "
     config.vm.provision :shell, :inline => pkg_cmd
   end
-end
 
-
-Vagrant.configure("2") do |config|
-  config.vm.provision :shell,
-    :inline => 'sudo -u vagrant sh -c "docker run -d --name etcd coreos/etcd"'
-  config.vm.provision :shell,
-    :inline => 'sudo -u vagrant sh -c "docker pull progrium/buildstep;docker pull bobtfish/synapse-etcd-amb;docker pull bobtfish/nerve-etcd"'
-
+  config.vm.provision "puppet" do |puppet|
+    puppet.manifests_path = "manifests"
+    puppet.module_path = "modules"
+    puppet.manifest_file  = "site.pp"
+  end
 end
 
 if !FORWARD_DOCKER_PORTS.nil?
