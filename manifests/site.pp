@@ -13,7 +13,8 @@ docker::image { 'bobtfish/nerve-etcd': }
 docker::image { 'bobtfish/app-envshow': }
 docker::run { 'etcd':
   image    => 'coreos/etcd',
-  use_name => true;
+  use_name => true,
+  command  => '';
 }
 ensure_packages(['vim', 'links', 'netcat'])
 file { '/home/vagrant/apps':
