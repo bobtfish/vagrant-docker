@@ -11,7 +11,7 @@ Vagrant::Config.run do |config|
   # Setup virtual machine box. This VM configuration code is always executed.
   config.vm.box = BOX_NAME
   config.vm.box_url = BOX_URI
-  config.vm.forward_port 4243, 4243
+ # config.vm.forward_port 4243, 4243
 
   # Provision docker and new kernel if deployment was not done
   if Dir.glob("#{File.dirname(__FILE__)}/.vagrant/machines/default/*/id").empty?
@@ -26,13 +26,15 @@ Vagrant::Config.run do |config|
     puppet.module_path = "modules"
     puppet.manifest_file  = "site.pp"
   end
-
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
 end
 
 Vagrant.configure("2") do |config|
-  (49000..49900).each do |port|
-    config.vm.network :forwarded_port, :host => port, :guest => port
-  end
+  config.vm.network "private_network", ip: "172.16.2.10"
 end
+
+#Vagrant.configure("2") do |config|
+#  (49000..49900).each do |port|
+#    config.vm.network :forwarded_port, :host => port, :guest => port
+#  end
 
