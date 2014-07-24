@@ -27,4 +27,5 @@ file { '/home/vagrant/apps':
   ensure => 'link',
   target => '/vagrant/apps'
 }
+include 'golang'
 

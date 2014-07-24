@@ -6,4 +6,5 @@ mod 'puppetlabs/apt'
 mod 'richardc/datacat'
 mod 'garethr/erlang'
 mod 'nanliu/staging'
+mod 'garethr/golang'
 
