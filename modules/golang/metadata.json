@@ -1,0 +1,37 @@
+{
+  "name": "garethr-golang",
+  "version": "0.1.0",
+  "source": "git://github.com/garethr/garethr-golang.git",
+  "author": "Gareth Rushgrove",
+  "license": "Apache License, Version 2.0",
+  "summary": "Module for installing go from the JuJu PPA",
+  "description": "Install one of the official golang packages",
+  "project_page": "UNKNOWN",
+  "dependencies": [
+    {
+      "name": "puppetlabs/apt",
+      "version_requirement": ">= 1.1.0"
+    },
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">=3.2.0"
+    }
+  ],
+  "types": [
+
+  ],
+  "checksums": {
+    "Gemfile": "77971e9eda08a2d5b4de76ef05c31437",
+    "Gemfile.lock": "df0842f95eb6bebbc54fc96489a1190e",
+    "LICENSE": "e7fff5d8ca4f44f1279782ead2da5925",
+    "Modulefile": "89650613210b2ec0a78b33b835e7ca6e",
+    "README.md": "7491fb92239b5dafb4fcbc9694c57f6b",
+    "Rakefile": "a98b55f4dff239db6e4ab16bbe795a0b",
+    "manifests/init.pp": "b9000b5715ed17b5b7d7dba976227d61",
+    "spec/classes/golang_spec.rb": "9c96879ca5587752daadf507970a620d",
+    "spec/spec_helper.rb": "0db89c9a486df193c0e40095422e19dc",
+    "spec/spec_helper_system.rb": "82b0186bda00427e1308bf1f63defdb5",
+    "spec/system/golang_spec.rb": "c5f3ee6c4f812f335b9a6a73fb8374a3",
+    "tests/base.pp": "77f0e36d05f3c3e5e8c0141755073d72"
+  }
+}
