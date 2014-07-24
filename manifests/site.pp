@@ -30,7 +30,7 @@ file { '/home/vagrant/apps':
 include 'golang'
 
 exec { 'Install nsenter':
-  command => 'docker run --rm -v /usr/local/bin:/target jpetazzo/nsenter'
+  command => 'docker run --rm -v /usr/local/bin:/target jpetazzo/nsenter',
   creates => '/usr/local/bin/nsenter'
 }
 
